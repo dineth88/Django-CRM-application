@@ -1,12 +1,31 @@
 {% extends 'account/main.html'%}
 
 {% block content %}
+<br>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Products</h5>
+        </div>
+        <div class="card card-body">
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                </tr>
 
-    <h1>Product</h1>
-
-    {% include 'account/navbar.html' %}
-
-    {% comment %} {% include 'account/navbar.html' %} {% endcomment %}
+                {% for i in products %}
+                <tr>
+                    <td>{{i.name}}</td><!-- #Pass data into variables and other dynamic values -->
+                    <td>{{i.category}}</td>
+                    <td>{{i.price}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
     
 {% endblock %}
         
