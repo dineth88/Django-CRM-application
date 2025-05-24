@@ -1,4 +1,13 @@
 {% load static %}
+
+<style>
+  .hello-msg{
+    font-size: 18px;
+    color:#FFF;
+    margin-right:20px;
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <img width="100px" src="{% static 'account/images/image-removebg-preview.png' %}">
     <a class="navbar-brand" href="#">Navbar</a>
@@ -7,6 +16,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        <!--Hide navbar for customers-->
+        {% if request.user.is_staff %}
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'home' %}">Dashboard <span class="sr-only">(current)</span></a>
         </li>
@@ -16,6 +27,10 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">Pricing</a>
         </li>
+        {% endif %}
       </ul>
     </div>
+
+    <span class="hello-msg">Hello, {{request.user}}</span>
+    <span><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
   </nav>

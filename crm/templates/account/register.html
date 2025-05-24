@@ -74,8 +74,9 @@
 					<h3 id="form-title">REGISTER ACCOUNT</h3>
 				</div>
 				<div class="d-flex justify-content-center form_container">
-
+					
 					<form method="POST" action="">
+						{% csrf_token %}
 						<div class="input-group mb-3">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -106,6 +107,8 @@
 				   		</div>
 					</form>
 				</div>
+
+				{{form.errors}}
 		
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
@@ -135,22 +138,3 @@
 </body>
 </html>
 
-{% comment %} <h3>Register</h3>
-
-<form method="POST" action="">
-    {% csrf_token %}
-    {% comment %} {{form.as_p}} <!--Add every form element inside <p> tag--> {% endcomment %}
-    {% comment %} {{form.username.label}}
-    {{form.username}}
-
-    {{form.email.label}}
-    {{form.email}}
-
-    {{form.password1.label}}
-    {{form.password1}}
-
-    {{form.password2.label}}
-    {{form.password2}}
-
-    <input type="submit" name="Create User">
-</form> {% endcomment %} 
