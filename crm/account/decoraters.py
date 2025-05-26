@@ -21,7 +21,7 @@ def allowed_users(allowed_roles=[]):
             if group in allowed_roles:
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponse('You are not authenticated')
+                return redirect('login')
         return wrapper_func
     return decorator
 
@@ -36,6 +36,5 @@ def admin_only(view_func):
         
         if group == 'admin':
             return view_func(request, *args, **kwargs)
-        elif group != 'customer':
-            return HttpResponse('You are not authenticated. May u are the admin.')
+        
     return wrapper_func

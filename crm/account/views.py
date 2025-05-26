@@ -30,7 +30,6 @@ def registerPage(request):
     context = {'form':form}
     return render(request, 'account/register.html', context)
 
-@unauthenticate_user
 def loginPage(request):
     # if request.user.is_authenticated:
     #     return redirect('home')
@@ -43,7 +42,17 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+
+            group = None
+            if user.groups.exists():
+                group = user.groups.all()[0].name
+
+            if group == 'admin':
+                return redirect('home')  # to dashboard
+            elif group == 'customer':
+                return redirect('user-page')  # to /user/
+            else:
+                return HttpResponse("Group not recognized.")
         else:
             messages.info(request, 'Username OR password is incorrect')
 
@@ -60,7 +69,7 @@ def userPage(request):
     return render(request, 'account/user.html', context)
 
 @login_required(login_url='login')
-@admin_only
+@allowed_users(allowed_roles=['admin'])
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -71,12 +80,12 @@ def home(request):
     pending = orders.filter(status='Pending').count()
 
     context = {'orders': orders, 
-               'customers': customers,
-               'total_customers': total_customers,
-               'total_orders': total_orders,
-               'delivered': delivered,
-               'pending': pending
-               }
+            'customers': customers,
+            'total_customers': total_customers,
+            'total_orders': total_orders,
+            'delivered': delivered,
+            'pending': pending
+            }
     
     return render(request, 'account/dashboard.html', context)
 
@@ -100,6 +109,7 @@ def customer(request, pk):
     return render(request, 'account/customer.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createOrder(request, pk):
     #multiple forms inside single form
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status')) # extra = 10 Gives 10 more forms
@@ -118,6 +128,7 @@ def createOrder(request, pk):
     return render(request, 'account/order_form.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def updateOrder(request, pk):
     order = get_object_or_404(Order, id=pk) #order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
@@ -132,6 +143,7 @@ def updateOrder(request, pk):
     return render(request, 'account/order_form.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def deleteOrder(request, pk):
     order = get_object_or_404(Order, id=pk)  #order = Order.objects.get(id=pk)
     if request.method == 'POST':
@@ -140,6 +152,22 @@ def deleteOrder(request, pk):
 
     context = {'item': order}
     return render(request, 'account/delete.html', context)
+
+def rootRedirectView(request):
+    if request.user.is_authenticated:
+        group = None
+        if request.user.groups.exists():
+            group = request.user.groups.all()[0].name
+
+        if group == 'admin':
+            return redirect('home')  # dashboard
+        elif group == 'customer':
+            return redirect('user-page')
+        else:
+            return HttpResponse("No group assigned.")
+    else:
+        return redirect('login')
+
 
 
     
