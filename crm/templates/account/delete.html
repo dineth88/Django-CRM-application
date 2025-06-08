@@ -8,7 +8,7 @@
         <div class="card card-body">
             <p>Are you sure you want to delete this order "{{item}}"?</p>
             
-            <form method="POST" action="{% url 'delete_order' %}">
+            <form method="POST" action="{% url 'delete_order' item.id%}">
                 {% csrf_token %}
                 <a ahref="{% url 'home'%}">Cancel</a>
                 <input type="submit" name="Confirm">

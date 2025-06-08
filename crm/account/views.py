@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from .forms import CreateUserForm, CreateProductForm
 
 @unauthenticate_user
 def registerPage(request):
@@ -72,7 +73,8 @@ def userPage(request):
 @allowed_users(allowed_roles=['admin'])
 def home(request):
     orders = Order.objects.all()
-    customers = Customer.objects.all()
+    customer_group = Group.objects.get(name='customer')
+    customers = customer_group.user_set.all()
 
     total_customers = customers.count() 
     total_orders = orders.count()
@@ -125,7 +127,7 @@ def createOrder(request, pk):
             formset.save()
             return redirect('/')
     context = {'formset': formset}
-    return render(request, 'account/order_form.html', context)
+    return render(request, 'account/create_order.html', context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -152,6 +154,40 @@ def deleteOrder(request, pk):
 
     context = {'item': order}
     return render(request, 'account/delete.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createCustomer(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # ✅ Add user to 'customer' group
+            customer_group = Group.objects.get(name='customer')
+            user.groups.add(customer_group)
+            return redirect('home')  # redirect to a customer list page or homepage
+    context = {'form': form}
+    return render(request, 'account/customer_form.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createProduct(request):
+    form = CreateProductForm()
+    if request.method == 'POST':
+        form = CreateProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # redirect to a customer list page or homepage
+    context = {'form': form}
+    return render(request, 'account/create_product.html', context)
+
+
+def customer_list_view(request):
+    customer_group = Group.objects.get(name='customer')
+    customers = customer_group.user_set.all()
+    context = {'customers': customers}
+    return render(request, 'account/customer_list.html', context)
 
 def rootRedirectView(request):
     if request.user.is_authenticated:

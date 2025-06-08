@@ -1,0 +1,7 @@
+{% for customer in customers %}
+<tr>
+    <td><a href="{% url 'customer' customer.id %}" class="btn btn-sm btn-info">View</a></td>
+    <td>{{ customer.first_name }}</td>
+    <td>{{ customer.email }}</td>  <!-- You can also use `username` if phone is not a User field -->
+</tr>
+{% endfor %}
