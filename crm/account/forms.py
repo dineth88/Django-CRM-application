@@ -10,10 +10,18 @@ class OrderForm(ModelForm):
         fields = '__all__'
 
 class CreateUserForm(UserCreationForm):
+    first_name = forms.CharField(max_length=200, required=True)
+    last_name = forms.CharField(max_length=200, required=True)
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
 
+class CustomerForm(ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['first_name', 'last_name', 'email', 'phone']
+        
 class CreateProductForm(ModelForm):
     class Meta:
         model = Product

@@ -8,15 +8,18 @@
             <div class="card card-body">
                 <h5>Customer: </h5>
                 <hr>
-                <a class="btn btn-outline-info btn-sm btn-block" href="">Update Customer</a>
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_customer' customer.id %}">Update Customer</a>
                 <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_order' customer.id %}">Place Order</a>
+                <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_customer' customer.id %}">Delete Customer</a>
             </div>
         </div>
 
         <div class="col-md">
             <div class="card card-body">
-                <h5>Contact Information</h5>
+                <h5>Customer Information</h5>
                 <hr>
+                <p>First name: {{customer.first_name}}</p>
+                <p>Last name: {{customer.last_name}}</p>
                 <p>Email: {{customer.email}}</p>
                 <p>Phone: {{customer.phone}}</p>
                 </div>
@@ -36,7 +39,28 @@
         <div class="col-md">
             <div class="card card-body">
                 <form method="get">
-                    {{myFilter.form}}
+                    <div class="form-group mb-3">
+                        <label for="{{ myFilter.form.start_date.id_for_label }}">Start Date:</label>
+                        {{ myFilter.form.start_date }}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="{{ myFilter.form.end_date.id_for_label }}">End Date:</label>
+                        {{ myFilter.form.end_date }}
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="{{ myFilter.form.note.id_for_label }}">Note:</label>
+                        {{ myFilter.form.note }}
+                    </div>
+                    {# Render other fields if any #}
+                    {% for field in myFilter.form %}
+                        {% if field.name != 'start_date' and field.name != 'end_date' and field.name != 'note' %}
+                            <div class="form-group mb-3">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                {{ field }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>

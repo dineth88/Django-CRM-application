@@ -9,8 +9,16 @@
                 {% csrf_token %}
                 {{ formset.management_form}}
                 {% for form in formset %}
-                    {{form}}
-                <hr>
+                    <div>
+                        {{ form.product.label_tag }} {{ form.product }}
+                    </div>
+                    <div>
+                        {{ form.status.label_tag }} {{ form.status }}
+                    </div>
+                    <div>
+                        {{ form.note.label_tag }} {{ form.note }}
+                    </div>
+                    <hr>
                 {% endfor %}
                 <input type="submit" name="submit">
             </form>
