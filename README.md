@@ -13,9 +13,6 @@ User Profile Management: Customers can view and update their profile information
 Installation
 Follow these steps to set up and run the Django CRM application on your local machine.
 
-Prerequisites
-Python: Make sure you have Python 3.x installed. You can download it from https://www.python.org/downloads/.
-pip: Python package installer, usually included with Python.
 Steps
 Clone the Repository:
 If you haven't already, clone the project repository to your local machine using Git:
