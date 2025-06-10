@@ -1,5 +1,7 @@
 Django CRM Application
 
+https://github.com/user-attachments/assets/79cd47de-320d-4077-9c03-4e968ba572e8
+
 This is a basic Customer Relationship Management (CRM) application built using Django. It allows you to manage customers, products, and orders. Administrators have full control over the system, while customers can view their order history and profile information.
 
 Features
